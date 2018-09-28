@@ -1,0 +1,40 @@
+version: '2.1'
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    command: "yarn start"
+    depends_on:
+      - backend
+    environment:
+      - API_HOST=backend
+    ports:
+      - "8000:8000"
+    working_dir: /frontend
+    volumes:
+      - ./frontend:/frontend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      mysql:
+        condition: service_healthy
+    entrypoint:
+      - /usr/local/bin/docker-entrypoint.sh
+    volumes:
+      - ./backend:/backend
+    ports:
+      - "3000:3000"
+    working_dir: /backend
+    
+  mysql:
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    healthcheck:
+      test: "exit 0"
