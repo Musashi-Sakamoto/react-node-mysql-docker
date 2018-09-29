@@ -1,4 +1,4 @@
-version: '2.1'
+version: "2.1"
 services:
   frontend:
     build:
@@ -29,13 +29,15 @@ services:
     ports:
       - "3000:3000"
     working_dir: /backend
-    
+
   mysql:
     build:
       context: ./mysql
       dockerfile: Dockerfile
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - ./mysql/mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
     healthcheck:
