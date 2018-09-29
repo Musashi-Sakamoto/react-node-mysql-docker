@@ -1,4 +1,14 @@
-FROM node:8.11
+FROM ubuntu:18.04
+
+RUN apt-get update && \
+    apt-get install --yes nodejs npm curl build-essential
+
+RUN npm cache clean && \
+    npm install -g n && \
+    npm install -g yarn && \
+    ln -sf /usr/local/bin/node /usr/bin/node
+
+RUN n 8.11.0
 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
