@@ -6,6 +6,7 @@ RUN apt-get update && \
 RUN npm cache clean && \
     npm install -g n && \
     npm install -g yarn && \
+    npm install -g nodemon && \
     ln -sf /usr/local/bin/node /usr/bin/node
 
 RUN n 8.11.0

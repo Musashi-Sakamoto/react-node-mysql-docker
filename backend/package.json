@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "migrate": "node_modules/.bin/sequelize db:migrate --env development",
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
