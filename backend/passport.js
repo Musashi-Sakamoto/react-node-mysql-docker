@@ -30,13 +30,14 @@ passport.use(new LocalStrategy({
                 password
             }
         })
-        .then(user => {
-            if (!user) {
+        .then(userInfo => {
+            console.log(`user: ${JSON.stringify(userInfo[0])}`)
+            if (!userInfo[0]) {
                 return cb(null, false, {
                     message: 'Incorrect email or password.'
                 })
             }
-            return cb(null, user, {
+            return cb(null, userInfo[0].toJSON(), {
                 message: 'Logged In Successfully'
             })
         })

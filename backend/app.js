@@ -33,7 +33,9 @@ app.use('/', index);
 app.use('/users', passport.authenticate('jwt', {
   session: false
 }), users);
-app.use('/employees', employees)
+app.use('/employees', passport.authenticate('jwt', {
+  session: false
+}), employees)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
