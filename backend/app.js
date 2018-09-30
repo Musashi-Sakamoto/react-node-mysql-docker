@@ -4,11 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const passport = require('passport')
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 var employees = require('./routes/employees')
-
+const auth = require('./routes/auth')
 var app = express();
 
 // view engine setup
@@ -25,8 +26,13 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(passport.initialize())
+require('./passport')
+app.use('/auth', auth)
 app.use('/', index);
-app.use('/users', users);
+app.use('/users', passport.authenticate('jwt', {
+  session: false
+}), users);
 app.use('/employees', employees)
 
 // catch 404 and forward to error handler
