@@ -26,6 +26,7 @@ services:
       - /usr/local/bin/docker-entrypoint.sh
     volumes:
       - ./backend:/backend
+      - /backend/node_modules/
     ports:
       - "3000:3000"
     working_dir: /backend

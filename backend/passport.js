@@ -1,6 +1,7 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const passportJWT = require('passport-jwt')
+const bcrypt = require('bcrypt')
 const JWTStrategy = passportJWT.Strategy
 const ExtractJWT = passportJWT.ExtractJwt
 var user = require('./models').user
@@ -24,21 +25,27 @@ passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
 }, (email, password, cb) => {
-    return user.findOrCreate({
+    return user.findOne({
             where: {
-                email,
-                password
+                email
             }
         })
-        .then(userInfo => {
-            console.log(`user: ${JSON.stringify(userInfo[0])}`)
-            if (!userInfo[0]) {
+        .then(user => {
+            if (!user) {
                 return cb(null, false, {
-                    message: 'Incorrect email or password.'
+                    message: 'Incorrect email'
                 })
             }
-            return cb(null, userInfo[0].toJSON(), {
-                message: 'Logged In Successfully'
+            bcrypt.compare(password, user.password, (err, result) => {
+                if (result) {
+                    return cb(null, user.toJSON(), {
+                        message: 'Logged In Successfully'
+                    })
+                } else {
+                    return cb(null, false, {
+                        message: 'Incorrect password.'
+                    })
+                }
             })
         })
         .catch(err => {

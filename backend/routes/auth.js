@@ -2,6 +2,35 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
+const bcrypt = require('bcrypt')
+var user = require('../models').user
+
+router.post('/register', (req, res, next) => {
+    var email = req.body.email
+    var password = req.body.password
+
+    bcrypt.hash(password, 12)
+        .then(hash => {
+            return user.create({
+                email: email,
+                password: hash
+            })
+        })
+        .then(user => {
+            const token = jwt.sign(user.toJSON(), 'your_jwt_secret', {
+                expiresIn: '30 days'
+            })
+            res.json({
+                user,
+                token
+            })
+        })
+        .catch(err => {
+            res.status(400).json({
+                message: `${err}`
+            })
+        })
+})
 
 router.post('/login', (req, res, next) => {
 
