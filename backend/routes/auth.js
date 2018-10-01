@@ -20,7 +20,7 @@ router.post('/register', (req, res, next) => {
             const token = jwt.sign(user.toJSON(), 'your_jwt_secret', {
                 expiresIn: '30 days'
             })
-            res.json({
+            res.status(201).json({
                 user,
                 token
             })

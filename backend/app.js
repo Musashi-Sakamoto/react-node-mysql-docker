@@ -30,9 +30,7 @@ app.use(passport.initialize())
 require('./passport')
 app.use('/auth', auth)
 app.use('/', index);
-app.use('/users', passport.authenticate('jwt', {
-  session: false
-}), users);
+app.use('/users', users);
 app.use('/employees', passport.authenticate('jwt', {
   session: false
 }), employees)
